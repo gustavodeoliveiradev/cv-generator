@@ -1,0 +1,165 @@
+/* ============================================
+   PREVIEW DO CURRÍCULO
+   ============================================ */
+
+.preview-container {
+    position: sticky;
+    top: 20px;
+}
+
+.preview-header {
+    background: var(--card);
+    padding: 16px 24px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.preview-label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.preview-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.preview-paper {
+    background: white;
+    min-height: 800px;
+    padding: 50px;
+    box-shadow: var(--shadow-lg);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Estados */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-light);
+}
+
+.empty-state svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+/* Estilos do CV Renderizado */
+.cv-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 3px solid var(--primary);
+}
+
+.cv-name {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.cv-title {
+    font-size: 1.25rem;
+    color: var(--primary);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.cv-contact {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.cv-contact span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cv-section {
+    margin-bottom: 28px;
+}
+
+.cv-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+}
+
+.cv-item {
+    margin-bottom: 18px;
+}
+
+.cv-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cv-item-title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+}
+
+.cv-item-date {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.cv-item-subtitle {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+
+.cv-item-desc {
+    color: var(--text-light);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.cv-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cv-skill {
+    background: var(--bg);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 500;
+    border: 1px solid var(--border);
+}
+
+/* Print styles */
+@media print {
+    .preview-paper {
+        box-shadow: none;
+        padding: 0;
+    }
+}

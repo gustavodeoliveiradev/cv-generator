@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Generator - Crie seu currículo profissional</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/preview.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1 class="app-title">📄 CV Generator</h1>
+            <p class="app-subtitle">Preencha seus dados e veja seu currículo sendo criado em tempo real</p>
+        </header>
+
+        <main class="app-layout">
+            <!-- Editor -->
+            <section class="editor" aria-label="Editor de currículo">
+                <h2 class="section-title">📝 Informações Pessoais</h2>
+                
+                <form id="cvForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="fullName">Nome Completo *</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Digite seu Nome Completo" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jobTitle">Cargo Desejado</label>
+                            <input type="text" id="jobTitle" name="jobTitle" placeholder="Digite o Cargo Desejado">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Digite seu telefone">
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Localização</label>
+                            <input type="text" id="location" name="location" placeholder="Digite sua Cidade-Estado">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summary">Resumo Profissional</label>
+                        <textarea id="summary" name="summary" placeholder="Breve descrição sobre sua experiência e objetivos..."></textarea>
+                    </div>
+
+                    <h2 class="section-title">💼 Experiência Profissional</h2>
+                    <div id="experienceList" class="dynamic-list"></div>
+                    <button type="button" class="btn btn-secondary" data-action="add-experience">+ Adicionar Experiência</button>
+
+                    <h2 class="section-title">🎓 Educação</h2>
+                    <div id="educationList" class="dynamic-list"></div>
+                    <button type="button" class="btn btn-secondary" data-action="add-education">+ Adicionar Educação</button>
+
+                    <h2 class="section-title">⚡ Habilidades</h2>
+                    <div class="form-group">
+                        <label for="skills">Habilidades (separadas por vírgula)</label>
+                        <input type="text" id="skills" name="skills" placeholder="JavaScript, React, Node.js, CSS, HTML...">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" data-action="save">💾 Salvar Progresso</button>
+                </form>
+            </section>
+
+            <!-- Preview -->
+            <aside class="preview-container" aria-label="Preview do currículo">
+                <div class="preview-header">
+                    <span class="preview-label">Preview ao vivo</span>
+                    <div class="preview-actions">
+                        <button class="btn btn-secondary btn-sm" data-action="reset">Limpar</button>
+                        <button class="btn btn-primary btn-sm" data-action="export">Exportar PDF</button>
+                    </div>
+                </div>
+                <div class="preview-paper" id="preview">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p>Seu currículo aparecerá aqui...</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/preview.js"></script>
+    <script src="js/formHandler.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
