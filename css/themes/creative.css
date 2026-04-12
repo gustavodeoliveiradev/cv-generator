@@ -1,0 +1,91 @@
+/* ============================================
+   TEMA: CRIATIVO
+   Para designers, artistas, perfis criativos
+   ============================================ */
+
+.theme-creative {
+    /* Cores - Paleta quente */
+    --primary: #f59e0b;
+    --primary-dark: #d97706;
+    --primary-light: #fbbf24;
+    --bg: #fffbeb;
+    --card: #ffffff;
+    --text: #451a03;
+    --text-light: #92400e;
+    --border: #fde68a;
+    
+    /* Tipografia */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Estilo do CV */
+    --cv-header-align: center;
+    --cv-section-border: none;
+    --cv-skill-style: filled;
+    --cv-spacing: 1.7;
+}
+
+.theme-creative .cv-header {
+    border-bottom: none;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.theme-creative .cv-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 2px;
+}
+
+.theme-creative .cv-name {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.theme-creative .cv-title {
+    font-family: var(--font-body);
+    color: var(--primary-dark);
+    font-weight: 500;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+}
+
+.theme-creative .cv-section-title {
+    font-family: var(--font-heading);
+    color: var(--primary-dark);
+    font-size: 1.3rem;
+    text-transform: none;
+    letter-spacing: 0;
+    border-bottom: 1px dashed var(--border);
+    position: relative;
+    padding-left: 15px;
+}
+
+.theme-creative .cv-section-title::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+.theme-creative .cv-skill {
+    background: var(--primary);
+    color: white;
+    border-radius: 20px 0 20px 0;
+    font-weight: 500;
+}
+
+.theme-creative .cv-item-title {
+    font-family: var(--font-heading);
+    color: var(--text);
+}

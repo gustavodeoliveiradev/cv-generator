@@ -1,0 +1,38 @@
+/* ============================================
+   TEMA: MINIMALISTA (Padrão)
+   Clean, profissional, corporativo
+   ============================================ */
+
+.theme-minimal {
+    /* Cores */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #3b82f6;
+    --bg: #fafafa;
+    --card: #ffffff;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+    
+    /* Tipografia */
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Estilo do CV */
+    --cv-header-align: center;
+    --cv-section-border: 2px solid var(--primary);
+    --cv-skill-style: filled; /* filled | outline */
+    --cv-spacing: 1.5;
+}
+
+.theme-minimal .cv-name {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.theme-minimal .cv-section-title {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+}

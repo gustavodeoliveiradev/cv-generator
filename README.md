@@ -32,8 +32,8 @@ Projeto construído em **7 dias** com commits diários. Acompanhe nossa evoluç�
 
 | Dia | Data | Feature | Status | Commit |
 |:---:|:----:|---------|:------:|--------|
-| 1 | 11/04/2026 | Estrutura modular + Formulário base | ✅ | `feat: modular architecture with separated concerns` |
-| 2 | 12/04/2026 | Temas & Fontes dinâmicas | 🔄 | *em breve* |
+| 1 | 11/04/2026 | Estrutura modular + Formulário base | ✅ | `feat: modular architecture` |
+| 2 | 12/04/2026 | **3 Temas visuais + Fontes dinâmicas** | ✅ | `feat: theme system with 3 styles and google fonts` |
 | 3 | 13/04/2026 | Preview responsivo mobile | ⏳ | - |
 | 4 | 14/04/2026 | Exportação PDF real | ⏳ | - |
 | 5 | 15/04/2026 | Validações + UX polish | ⏳ | - |
@@ -128,7 +128,7 @@ Acesse `http://localhost:8000`
 
 ## 📝 Funcionalidades
 
-### ✅ Implementadas (Dia 1)
+### ✅ Implementadas (Dia 2)
 - [x] Formulário multi-etapas intuitivo
 - [x] Preview em tempo real (live)
 - [x] Adicionar/remover experiências dinamicamente
@@ -137,6 +137,11 @@ Acesse `http://localhost:8000`
 - [x] Arquitetura modular (Separação de responsabilidades)
 - [x] Design responsivo base
 - [x] Validações visuais de campos
+- [x] Sistema de 3 temas visuais (Minimalista, Moderno, Criativo)
+- [x] Switcher de fontes do Google Fonts (5 opções)
+- [x] Persistência de preferências de tema
+- [x] Transições suaves entre temas
+- [x] Preview em tempo real das mudanças
 
 ### 🔄 Em Desenvolvimento
 - [ ] Switcher de temas (Dia 2)

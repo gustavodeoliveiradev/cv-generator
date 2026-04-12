@@ -1,0 +1,80 @@
+/* ============================================
+   TEMA: MODERNO
+   Cores vibrantes, design 2024, tech vibe
+   ============================================ */
+
+.theme-modern {
+    /* Cores - Gradiente suave */
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    
+    /* Tipografia */
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Estilo do CV */
+    --cv-header-align: left;
+    --cv-section-border: none;
+    --cv-skill-style: outline;
+    --cv-spacing: 1.6;
+}
+
+.theme-modern .cv-header {
+    text-align: left;
+    border-bottom: 3px solid var(--primary);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+    padding: 40px;
+    margin: -50px -50px 30px -50px;
+    border-radius: 0;
+}
+
+.theme-modern .cv-name {
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.theme-modern .cv-title {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+.theme-modern .cv-contact {
+    justify-content: flex-start;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.theme-modern .cv-section-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.theme-modern .cv-skill {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 6px 16px;
+}
+
+.theme-modern .cv-skill:hover {
+    background: var(--primary);
+    color: white;
+}
