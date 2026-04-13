@@ -36,6 +36,7 @@
    BREAKPOINT: Mobile (< 768px)
    ============================================ */
 @media (max-width: 767px) {
+
     /* Container */
     .container {
         padding: 0;
@@ -44,12 +45,12 @@
 
     /* Header compacto */
     .app-header {
-        padding: 20px 15px;
+        padding: 15px;
         background: var(--card);
         border-bottom: 1px solid var(--border);
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 50;
         box-shadow: var(--shadow-sm);
     }
 
@@ -59,7 +60,8 @@
 
     .app-subtitle {
         font-size: 0.9rem;
-        display: none; /* Oculto no mobile, mostra apenas no desktop */
+        display: none;
+        /* Oculto no mobile, mostra apenas no desktop */
     }
 
     .app-header.has-mobile-tabs .app-subtitle {
@@ -99,6 +101,14 @@
 
     .preview-container.active-mobile {
         display: block;
+        z-index: 60;
+    }
+
+    .preview-container.active-mobile .preview-header {
+        position: sticky;
+        top: 0;
+        z-index: 61;
+        background: var(--card);
     }
 
     .preview-container.fullscreen-mobile {
@@ -107,10 +117,23 @@
     }
 
     .preview-header {
-        border-radius: 0;
-        padding: 12px 15px;
+        flex-wrap: wrap;
+        padding: 12px;
+        gap: 5px;
         position: sticky;
         top: 0;
+    }
+
+    .preview-label {
+        font-size: 0.9rem;
+        width: 100%;
+        /* Quebra linha se necessário */
+        margin-bottom: 5px;
+    }
+
+    .preview-actions {
+        width: 100%;
+        justify-content: space-between;
     }
 
     .preview-paper {
@@ -188,9 +211,11 @@
     textarea,
     select {
         padding: 14px 16px;
-        font-size: 16px; /* Previne zoom no iOS */
+        font-size: 16px;
+        /* Previne zoom no iOS */
         border-radius: var(--radius);
-        min-height: 48px; /* Touch target mínimo */
+        min-height: 48px;
+        /* Touch target mínimo */
     }
 
     textarea {
@@ -210,8 +235,10 @@
     }
 
     .btn-sm {
-        padding: 12px 16px;
-        min-height: 40px;
+        flex: 1;
+        min-height: 44px;
+        /* Touch target adequado */
+        font-size: 0.85rem;
     }
 
     /* Lista dinâmica mobile */
@@ -262,6 +289,17 @@
 
     .cv-paper {
         padding: 30px 20px;
+    }
+
+    :root {
+        --mobile-header-height: 65px;
+    }
+
+    /* Esconde texto "Fullscreen" no mobile pequeno, mostra só ícone */
+    @media (max-width: 380px) {
+        .btn-fullscreen span {
+            display: none;
+        }
     }
 }
 
@@ -350,6 +388,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
