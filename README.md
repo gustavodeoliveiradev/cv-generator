@@ -33,10 +33,10 @@ Projeto construído em **7 dias** com commits diários. Acompanhe nossa evoluç�
 | Dia | Data | Feature | Status | Commit |
 |:---:|:----:|---------|:------:|--------|
 | 1 | 11/04/2026 | Estrutura modular + Formulário base | ✅ | `feat: modular architecture` |
-| 2 | 12/04/2026 | **3 Temas visuais + Fontes dinâmicas** | ✅ | `feat: theme system with 3 styles and google fonts` |
-| 3 | 13/04/2026 | Preview responsivo mobile | ⏳ | - |
+| 2 | 12/04/2026 | 3 Temas visuais + Fontes dinâmicas | ✅ | `feat: theme system` |
+| 3 | 13/04/2026 | **Mobile responsive + UX polish** | ✅ | `feat: mobile-first navigation and responsive layout` |
 | 4 | 14/04/2026 | Exportação PDF real | ⏳ | - |
-| 5 | 15/04/2026 | Validações + UX polish | ⏳ | - |
+| 5 | 15/04/2026 | Validações avançadas | ⏳ | - |
 | 6 | 16/04/2026 | Import/Export JSON + Drag-drop | ⏳ | - |
 | 7 | 17/04/2026 | Deploy + README definitivo | ⏳ | - |
 
@@ -128,7 +128,7 @@ Acesse `http://localhost:8000`
 
 ## 📝 Funcionalidades
 
-### ✅ Implementadas (Dia 2)
+### ✅ Implementadas (Dia 3)
 - [x] Formulário multi-etapas intuitivo
 - [x] Preview em tempo real (live)
 - [x] Adicionar/remover experiências dinamicamente
@@ -142,6 +142,14 @@ Acesse `http://localhost:8000`
 - [x] Persistência de preferências de tema
 - [x] Transições suaves entre temas
 - [x] Preview em tempo real das mudanças
+- [x] Layout mobile-first (320px-767px)
+- [x] Navegação por abas (Editor/Preview)
+- [x] Gestos de swipe para alternar abas
+- [x] Preview fullscreen no mobile
+- [x] Touch targets otimizados (48px mínimo)
+- [x] Suporte a safe areas (iPhone X+)
+- [x] Orientação landscape otimizada
+- [x] Prevenção de zoom no iOS
 
 ### 🔄 Em Desenvolvimento
 - [ ] Switcher de temas (Dia 2)

@@ -197,6 +197,7 @@ textarea {
     border-radius: var(--radius);
     padding: 20px;
     margin-bottom: 25px;
+    position: relative;
 }
 
 .customization-panel .section-title {
@@ -233,4 +234,13 @@ textarea {
 
 #preview * {
     transition: font-family 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+@media (max-width: 767px) {
+    .customization-panel {
+        margin: -20px -15px 20px -15px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
 }

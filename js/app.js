@@ -3,12 +3,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa módulos na ordem correta
+    // Ordem de inicialização importante
     Preview.init();
     FormHandler.init();
-    Themes.init(); // NOVO: Inicializa temas
+    Themes.init();
+    Mobile.init(); // NOVO: Inicializa mobile navigation
     
-    console.log('🚀 CV Generator inicializado!');
-    console.log('🎨 Temas disponíveis:', Themes.availableThemes.length);
-    console.log('🔤 Fontes disponíveis:', Themes.availableFonts.length);
+    console.log('🚀 CV Generator v0.3.0 - Mobile Ready!');
+    console.log('📱 Mobile:', Mobile.getState().isMobile ? 'Sim' : 'Não');
+    console.log('🎨 Tema:', Themes.currentTheme);
+    console.log('🔤 Fonte:', Themes.currentFont);
 });
