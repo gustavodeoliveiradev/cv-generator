@@ -18,7 +18,7 @@ const FormHandler = {
      */
     setupPersonalFields() {
         const fields = ['fullName', 'jobTitle', 'email', 'phone', 'location', 'summary'];
-        
+
         fields.forEach(field => {
             const element = document.getElementById(field);
             if (!element) return;
@@ -77,7 +77,7 @@ const FormHandler = {
     addExperienceField() {
         const id = State.addExperience({ title: '', company: '', date: '', description: '' });
         const container = document.getElementById('experienceList');
-        
+
         const div = document.createElement('div');
         div.className = 'list-item';
         div.dataset.id = id;
@@ -123,7 +123,7 @@ const FormHandler = {
     addEducationField() {
         const id = State.addEducation({ degree: '', school: '', date: '' });
         const container = document.getElementById('educationList');
-        
+
         const div = document.createElement('div');
         div.className = 'list-item';
         div.dataset.id = id;
@@ -179,20 +179,21 @@ const FormHandler = {
 
         State.reset();
         Storage.clear();
-        
+
         // Limpa formulário visual
         document.getElementById('cvForm').reset();
         document.getElementById('experienceList').innerHTML = '';
         document.getElementById('educationList').innerHTML = '';
-        
+
         Utils.showToast('🗑️ Dados limpos');
     },
 
     /**
-     * Exporta (placeholder para PDF futuro)
+     * Exporta PDF (agora usando o módulo dedicado)
      */
     handleExport() {
-        Utils.showToast('📄 Exportação PDF será implementada no Dia 4!');
+        // Chama o novo módulo de exportação
+        PDFExport.export();
     },
 
     /**

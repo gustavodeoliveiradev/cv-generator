@@ -34,9 +34,9 @@ Projeto construído em **7 dias** com commits diários. Acompanhe nossa evoluç�
 |:---:|:----:|---------|:------:|--------|
 | 1 | 11/04/2026 | Estrutura modular + Formulário base | ✅ | `feat: modular architecture` |
 | 2 | 12/04/2026 | 3 Temas visuais + Fontes dinâmicas | ✅ | `feat: theme system` |
-| 3 | 13/04/2026 | **Mobile responsive + UX polish** | ✅ | `feat: mobile-first navigation and responsive layout` |
-| 4 | 14/04/2026 | Exportação PDF real | ⏳ | - |
-| 5 | 15/04/2026 | Validações avançadas | ⏳ | - |
+| 3 | 13/04/2026 | Mobile responsive + Swipe navigation | ✅ | `feat: mobile-first responsive` |
+| 4 | 14/04/2026 | **Exportação PDF Profissional** | ✅ | `feat: pdf export with html2canvas and jspdf` |
+| 5 | 15/04/2026 | Validações avançadas + UX polish | ⏳ | - |
 | 6 | 16/04/2026 | Import/Export JSON + Drag-drop | ⏳ | - |
 | 7 | 17/04/2026 | Deploy + README definitivo | ⏳ | - |
 
@@ -128,7 +128,7 @@ Acesse `http://localhost:8000`
 
 ## 📝 Funcionalidades
 
-### ✅ Implementadas (Dia 3)
+### ✅ Implementadas (Dia 4)
 - [x] Formulário multi-etapas intuitivo
 - [x] Preview em tempo real (live)
 - [x] Adicionar/remover experiências dinamicamente
@@ -150,6 +150,12 @@ Acesse `http://localhost:8000`
 - [x] Suporte a safe areas (iPhone X+)
 - [x] Orientação landscape otimizada
 - [x] Prevenção de zoom no iOS
+- [x] Exportação PDF real (html2canvas + jsPDF)
+- [x] Qualidade retina (2x) para texto nítido
+- [x] Preservação de temas e fontes no PDF
+- [x] Nome de arquivo automático (CV_Nome_Data.pdf)
+- [x] Otimização para mobile (switch automático para preview)
+- [x] Validação de conteúdo antes de exportar
 
 ### 🔄 Em Desenvolvimento
 - [ ] Switcher de temas (Dia 2)
