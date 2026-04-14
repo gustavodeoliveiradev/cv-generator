@@ -1,6 +1,7 @@
 /**
  * Mobile Navigation & Responsive Handler
- * Mobile-first UX
+ * Dia 3: Mobile-first UX
+ * VERSÃO CORRIGIDA - Preview sempre acessível
  */
 
 const Mobile = {
@@ -16,7 +17,7 @@ const Mobile = {
         this.setupEventListeners();
         this.createMobileNav();
         this.setupSwipeGestures();
-        
+
         // Verifica na inicialização
         if (this.isMobile) {
             this.switchTab('editor');
@@ -32,7 +33,7 @@ const Mobile = {
         const checkMobile = () => {
             const wasMobile = this.isMobile;
             this.isMobile = window.innerWidth < 768;
-            
+
             if (wasMobile !== this.isMobile) {
                 this.handleViewportChange();
             }
@@ -46,20 +47,24 @@ const Mobile = {
      * Cria navegação inferior (tabs)
      */
     createMobileNav() {
+        // Remove nav existente se houver
+        const existingNav = document.querySelector('.mobile-nav');
+        if (existingNav) existingNav.remove();
+
         const nav = document.createElement('nav');
         nav.className = 'mobile-nav';
         nav.setAttribute('role', 'tablist');
         nav.setAttribute('aria-label', 'Navegação principal');
-        
+
         nav.innerHTML = `
-            <button class="mobile-nav-item active" data-tab="editor" role="tab" aria-selected="true" aria-controls="editor-panel">
+            <button class="mobile-nav-item active" data-tab="editor" role="tab" aria-selected="true" aria-controls="editor-panel" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
                 <span>Editar</span>
             </button>
-            <button class="mobile-nav-item" data-tab="preview" role="tab" aria-selected="false" aria-controls="preview-panel">
+            <button class="mobile-nav-item" data-tab="preview" role="tab" aria-selected="false" aria-controls="preview-panel" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
@@ -71,10 +76,17 @@ const Mobile = {
         document.body.appendChild(nav);
         this.mobileNav = nav;
 
-        // Event listeners
+        // Event listeners para touch e click
         nav.querySelectorAll('.mobile-nav-item').forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const tab = btn.dataset.tab;
+                this.switchTab(tab);
+            }, { passive: false });
+
             btn.addEventListener('click', (e) => {
-                const tab = e.currentTarget.dataset.tab;
+                e.preventDefault();
+                const tab = btn.dataset.tab;
                 this.switchTab(tab);
             });
         });
@@ -82,6 +94,7 @@ const Mobile = {
 
     /**
      * Alterna entre abas (Editor/Preview)
+     * VERSÃO CORRIGIDA - Garante que preview fique visível quando ativo
      */
     switchTab(tab) {
         if (!this.isMobile && tab === this.currentTab) return;
@@ -98,26 +111,35 @@ const Mobile = {
             btn.setAttribute('aria-selected', isActive);
         });
 
-        // Mostra/esconde painéis
+        // Mostra/esconde painéis NO MOBILE
         if (this.isMobile) {
             if (tab === 'editor') {
+                // Mostra editor, esconde preview
                 editor.classList.remove('hidden-mobile');
-                editor.classList.add('tab-transition');
-                preview.classList.remove('active-mobile', 'fullscreen-mobile');
+                editor.style.display = 'block';
+
+                preview.classList.remove('active-mobile');
+                preview.style.display = 'none';
+
                 this.isFullscreen = false;
             } else {
+                // Esconde editor, mostra preview
                 editor.classList.add('hidden-mobile');
-                preview.classList.add('active-mobile', 'tab-transition');
-                preview.classList.remove('fullscreen-mobile');
-                this.isFullscreen = false;
+                editor.style.display = 'none';
+
+                preview.classList.add('active-mobile');
+                preview.style.display = 'block';
+                preview.style.visibility = 'visible';
+                preview.style.opacity = '1';
+
+                // Força re-renderização do preview
+                Preview.render();
             }
 
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Feedback
-        Utils.showToast(tab === 'editor' ? '✏️ Modo edição' : '👁️ Modo preview', 1500);
+        console.log(`📱 Tab switched to: ${tab}`);
     },
 
     /**
@@ -144,13 +166,12 @@ const Mobile = {
      * Setup de event listeners
      */
     setupEventListeners() {
-        // Botão fullscreen no preview header
+        // Botão fullscreen
         document.addEventListener('click', (e) => {
             if (e.target.closest('[data-action="fullscreen"]')) {
                 this.toggleFullscreen();
             }
-            
-            // Sai do fullscreen ao clicar no header
+
             if (this.isFullscreen && e.target.closest('.preview-header')) {
                 this.toggleFullscreen();
             }
@@ -188,7 +209,7 @@ const Mobile = {
 
         document.addEventListener('touchend', (e) => {
             if (!this.isMobile) return;
-            
+
             touchEndX = e.changedTouches[0].screenX;
             const diff = touchStartX - touchEndX;
 
@@ -196,7 +217,7 @@ const Mobile = {
             if (Math.abs(diff) > minSwipeDistance && diff > 0 && this.currentTab === 'editor') {
                 this.switchTab('preview');
             }
-            
+
             // Swipe right: Preview → Editor
             if (Math.abs(diff) > minSwipeDistance && diff < 0 && this.currentTab === 'preview') {
                 this.switchTab('editor');
@@ -214,7 +235,13 @@ const Mobile = {
         if (!this.isMobile) {
             // Desktop: mostra tudo
             editor.classList.remove('hidden-mobile');
+            editor.style.display = '';
+
             preview.classList.remove('active-mobile', 'fullscreen-mobile');
+            preview.style.display = '';
+            preview.style.visibility = '';
+            preview.style.opacity = '';
+
             this.mobileNav?.classList.remove('hidden');
             this.isFullscreen = false;
         } else {
@@ -222,7 +249,6 @@ const Mobile = {
             this.switchTab(this.currentTab);
         }
 
-        // Re-renderiza preview se necessário
         Preview.render();
     },
 

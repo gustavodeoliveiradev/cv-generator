@@ -1,150 +1,235 @@
 /**
- * Exportação PDF Profissional
- * html2canvas + jsPDF integration
+ * Exportação PDF Profissional - VERSÃO DEFINITIVA
+ * Estratégia: Renderização em container isolado sem CSS complexo
  */
 
 const PDFExport = {
-    // Configurações A4
-    A4_WIDTH: 210,  // mm
-    A4_HEIGHT: 297, // mm
-    MARGIN: 10,     // mm
-    
-    /**
-     * Inicializa o módulo
-     */
+    A4_WIDTH: 210,
+    A4_HEIGHT: 297,
+    MARGIN: 10,
+
     init() {
-        this.setupEventListeners();
-        console.log('📄 PDF Export initialized');
+        console.log('📄 PDF Export v2.0 initialized');
     },
 
-    /**
-     * Setup do botão de exportação
-     */
-    setupEventListeners() {
-        // O botão já existe no HTML com data-action="export"
-        // O FormHandler chama handleExport, que agora vai usar este módulo
-    },
-
-    /**
-     * Exporta o CV para PDF
-     */
     async export() {
-        const preview = document.getElementById('preview');
-        
-        // Verifica se há conteúdo
         if (!this.hasContent()) {
             Utils.showToast('❌ Preencha seu currículo antes de exportar!');
             return;
         }
 
-        Utils.showToast('📄 Gerando PDF... Aguarde', 2000);
+        Utils.showToast('📄 Gerando PDF... Aguarde', 3000);
 
         try {
-            // 1. Prepara o preview para captura (remove scroll, etc)
-            const originalStyles = this.prepareForCapture(preview);
-            
-            // 2. Renderiza com html2canvas em alta qualidade
-            const canvas = await html2canvas(preview, {
-                scale: 2, // Retina quality
+            // 🚨 NOVA ESTRATÉGIA: Cria container limpo para renderização
+            const cleanContainer = this.createCleanContainer();
+            document.body.appendChild(cleanContainer);
+
+            // Aguarda renderização
+            await this.wait(500);
+
+            // Captura do container limpo
+            const canvas = await html2canvas(cleanContainer, {
+                scale: 2,
                 useCORS: true,
                 allowTaint: true,
                 backgroundColor: '#ffffff',
                 logging: false,
-                windowWidth: preview.scrollWidth,
-                windowHeight: preview.scrollHeight
+                windowWidth: 800,
+                windowHeight: 1000,
+                width: 800,
+                height: Math.max(cleanContainer.offsetHeight, 600)
             });
 
-            // 3. Restaura estilos originais
-            this.restoreStyles(preview, originalStyles);
+            // Remove container temporário
+            document.body.removeChild(cleanContainer);
 
-            // 4. Converte para PDF
+            // Valida canvas
+            if (!canvas || canvas.width < 100 || canvas.height < 100) {
+                throw new Error('Canvas inválido gerado');
+            }
+
+            console.log('✅ Canvas gerado:', canvas.width, 'x', canvas.height);
+
+            // Converte para PDF
             const pdf = this.canvasToPDF(canvas);
-            
-            // 5. Download
             const fileName = this.generateFileName();
             pdf.save(fileName);
-            
+
             Utils.showToast('✅ PDF baixado com sucesso!');
-            
+
         } catch (error) {
-            console.error('Erro ao gerar PDF:', error);
-            Utils.showToast('❌ Erro ao gerar PDF. Tente novamente.');
+            console.error('❌ Erro PDF:', error);
+            Utils.showToast('❌ Erro: ' + error.message);
         }
     },
 
     /**
-     * Verifica se há conteúdo para exportar
+     * 🎯 CRIA CONTAINER LIMPO SEM CSS PROBLEMATICO
      */
-    hasContent() {
+    createCleanContainer() {
         const data = State.data;
-        return data.personal.fullName || 
-               data.experience.length > 0 || 
-               data.education.length > 0;
-    },
+        const theme = Themes.currentTheme;
 
-    /**
-     * Prepara o elemento para captura limpa
-     */
-    prepareForCapture(element) {
-        const original = {
-            maxHeight: element.style.maxHeight,
-            overflow: element.style.overflow,
-            transform: element.style.transform
+        // Cores por tema (sólidas, sem gradientes)
+        const themeColors = {
+            minimal: { primary: '#2563eb', text: '#1f2937', bg: '#ffffff' },
+            modern: { primary: '#6366f1', text: '#0f172a', bg: '#ffffff' },
+            creative: { primary: '#d97706', text: '#451a03', bg: '#fffbeb' }
         };
 
-        // Remove limitações de scroll para capturar tudo
-        element.style.maxHeight = 'none';
-        element.style.overflow = 'visible';
-        
-        // Garante que o tema atual esteja aplicado
-        element.classList.add(`theme-${Themes.currentTheme}`);
+        const colors = themeColors[theme] || themeColors.minimal;
 
-        return original;
+        const container = document.createElement('div');
+        container.id = 'pdf-temp-container';
+        container.style.cssText = `
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            width: 800px;
+            background: ${colors.bg};
+            padding: 60px;
+            font-family: ${Themes.currentFont === 'playfair' ? 'Georgia, serif' : 'Inter, Arial, sans-serif'};
+            color: ${colors.text};
+            line-height: 1.6;
+            box-sizing: border-box;
+            z-index: -9999;
+        `;
+
+        // Monta HTML limpo do CV
+        container.innerHTML = this.buildCleanHTML(data, colors);
+
+        return container;
     },
 
     /**
-     * Restaura estilos originais
+     * 📝 CONSTRÓI HTML LIMPO DO CV
      */
-    restoreStyles(element, styles) {
-        Object.assign(element.style, styles);
+    buildCleanHTML(data, colors) {
+        const p = data.personal;
+
+        // Header
+        let html = `
+            <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid ${colors.primary};">
+                <h1 style="font-size: 42px; margin: 0 0 10px 0; color: ${colors.text}; font-weight: 700;">${p.fullName || 'Seu Nome'}</h1>
+                <p style="font-size: 20px; margin: 0 0 15px 0; color: ${colors.primary}; font-weight: 500;">${p.jobTitle || ''}</p>
+                <div style="font-size: 14px; color: #666;">
+                    ${p.email ? `<span style="margin: 0 10px;">📧 ${p.email}</span>` : ''}
+                    ${p.phone ? `<span style="margin: 0 10px;">📱 ${p.phone}</span>` : ''}
+                    ${p.location ? `<span style="margin: 0 10px;">📍 ${p.location}</span>` : ''}
+                </div>
+            </div>
+        `;
+
+        // Resumo
+        if (p.summary) {
+            html += `
+                <div style="margin-bottom: 25px;">
+                    <h2 style="font-size: 14px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Resumo Profissional</h2>
+                    <p style="margin: 0; color: #555; line-height: 1.7;">${p.summary}</p>
+                </div>
+            `;
+        }
+
+        // Experiência
+        if (data.experience.length > 0) {
+            html += `
+                <div style="margin-bottom: 25px;">
+                    <h2 style="font-size: 14px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Experiência Profissional</h2>
+            `;
+
+            data.experience.forEach(exp => {
+                html += `
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px;">
+                            <h3 style="font-size: 16px; margin: 0; color: ${colors.text}; font-weight: 600;">${exp.title || 'Cargo'}</h3>
+                            <span style="font-size: 13px; color: #888;">${exp.date || ''}</span>
+                        </div>
+                        <p style="font-size: 14px; color: ${colors.primary}; margin: 0 0 8px 0; font-weight: 500;">${exp.company || ''}</p>
+                        <p style="font-size: 13px; color: #666; margin: 0; line-height: 1.6;">${exp.description || ''}</p>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+        }
+
+        // Educação
+        if (data.education.length > 0) {
+            html += `
+                <div style="margin-bottom: 25px;">
+                    <h2 style="font-size: 14px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Educação</h2>
+            `;
+
+            data.education.forEach(edu => {
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <h3 style="font-size: 16px; margin: 0; color: ${colors.text}; font-weight: 600;">${edu.degree || 'Curso'}</h3>
+                            <span style="font-size: 13px; color: #888;">${edu.date || ''}</span>
+                        </div>
+                        <p style="font-size: 14px; color: ${colors.primary}; margin: 5px 0 0 0; font-weight: 500;">${edu.school || ''}</p>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+        }
+
+        // Habilidades
+        if (data.skills.length > 0) {
+            html += `
+                <div style="margin-bottom: 25px;">
+                    <h2 style="font-size: 14px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Habilidades</h2>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            `;
+
+            data.skills.forEach(skill => {
+                if (skill.trim()) {
+                    html += `<span style="background: ${colors.primary}; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;">${skill.trim()}</span>`;
+                }
+            });
+
+            html += '</div></div>';
+        }
+
+        return html;
     },
 
-    /**
-     * Converte canvas para PDF A4
-     */
     canvasToPDF(canvas) {
         const { jsPDF } = window.jspdf;
-        
-        // Cria PDF A4
         const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        // Calcula dimensões
+
         const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = this.A4_WIDTH - (this.MARGIN * 2);
-        const pdfHeight = this.A4_HEIGHT - (this.MARGIN * 2);
-        
-        // Proporção da imagem
+
+        // Cálculos de dimensão seguros
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        
-        // Dimensões finais
-        const finalWidth = imgWidth * ratio;
-        const finalHeight = imgHeight * ratio;
-        
-        // Centraliza na página
-        const x = (this.A4_WIDTH - finalWidth) / 2;
-        const y = (this.A4_HEIGHT - finalHeight) / 2;
-        
-        // Adiciona imagem ao PDF
+        const ratio = Math.min(190 / imgWidth, 277 / imgHeight) * 0.264583;
+
+        let finalWidth = imgWidth * ratio;
+        let finalHeight = imgHeight * ratio;
+
+        // Fallbacks
+        if (!Number.isFinite(finalWidth) || finalWidth <= 0) finalWidth = 190;
+        if (!Number.isFinite(finalHeight) || finalHeight <= 0) finalHeight = 250;
+
+        finalWidth = Math.min(finalWidth, 190);
+        finalHeight = Math.min(finalHeight, 277);
+
+        const x = (210 - finalWidth) / 2;
+        const y = 10;
+
         pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-        
+
         return pdf;
     },
 
-    /**
-     * Gera nome do arquivo baseado no nome do usuário
-     */
+    hasContent() {
+        const data = State.data;
+        return data.personal.fullName || data.experience.length > 0 || data.education.length > 0;
+    },
+
     generateFileName() {
         const name = State.data.personal.fullName || 'Curriculo';
         const cleanName = name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
@@ -152,21 +237,6 @@ const PDFExport = {
         return `CV_${cleanName}_${date}.pdf`;
     },
 
-    /**
-     * Versão mobile otimizada (preview em tela cheia antes de capturar)
-     */
-    async exportMobile() {
-        if (Mobile.isMobile && Mobile.currentTab !== 'preview') {
-            // Muda para preview primeiro
-            Mobile.switchTab('preview');
-            await this.wait(500); // Aguarda transição
-        }
-        return this.export();
-    },
-
-    /**
-     * Util: aguarda ms
-     */
     wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

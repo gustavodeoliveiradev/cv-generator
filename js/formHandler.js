@@ -189,7 +189,7 @@ const FormHandler = {
     },
 
     /**
-     * Exporta PDF (agora usando o módulo dedicado)
+     * Exporta PDF (usando o módulo dedicado)
      */
     handleExport() {
         // Chama o novo módulo de exportação
