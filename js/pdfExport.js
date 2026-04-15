@@ -11,6 +11,10 @@ const PDFExport = {
     },
 
     async export() {
+        if (!Validations.validateBeforeExport()) {
+            return;
+        }
+        
         if (!this.hasContent()) {
             Utils.showToast('❌ Preencha seu currículo antes de exportar!');
             return;
@@ -57,19 +61,19 @@ const PDFExport = {
 
         // 🎨 CORES EXATAS de cada tema (baseado nos CSS originais)
         const themeColors = {
-            minimal: { 
+            minimal: {
                 primary: '#2563eb',      // Azul corporativo
                 text: '#1f2937',         // Cinza escuro
                 bg: '#ffffff',           // Branco puro
                 accent: '#3b82f6'        // Azul claro
             },
-            modern: { 
+            modern: {
                 primary: '#4f46e5',      // Índigo escuro (era #6366f1, muito claro)
                 text: '#0f172a',         // Slate 900
                 bg: '#f8fafc',           // Slate 50 (cinza muito claro)
                 accent: '#6366f1'        // Índigo 500
             },
-            creative: { 
+            creative: {
                 primary: '#b45309',      // Âmbar escuro (era #d97706)
                 text: '#451a03',         // Marrom escuro
                 bg: '#fffbeb',           // Âmbar 50
@@ -80,8 +84,8 @@ const PDFExport = {
         const colors = themeColors[theme] || themeColors.minimal;
 
         // Fonte
-        const fontFamily = Themes.currentFont === 'playfair' 
-            ? 'Georgia, "Times New Roman", serif' 
+        const fontFamily = Themes.currentFont === 'playfair'
+            ? 'Georgia, "Times New Roman", serif'
             : 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 
         const container = document.createElement('div');
@@ -111,17 +115,17 @@ const PDFExport = {
         const isModern = theme === 'modern';
 
         // Header com variações por tema
-        const headerBorder = isCreative 
+        const headerBorder = isCreative
             ? `border-bottom: 3px solid ${colors.primary}; position: relative;`
             : `border-bottom: 3px solid ${colors.primary};`;
 
-        const headerAfter = isCreative 
-            ? `<div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: ${colors.accent}; border-radius: 2px;"></div>` 
+        const headerAfter = isCreative
+            ? `<div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: ${colors.accent}; border-radius: 2px;"></div>`
             : '';
 
         const titleStyle = isCreative
             ? `font-size: 52px; margin: 0 0 15px 0; color: ${colors.text}; font-weight: 700; font-family: Georgia, serif;`
-            : (isModern 
+            : (isModern
                 ? `font-size: 48px; margin: 0 0 12px 0; color: ${colors.primary}; font-weight: 800; letter-spacing: -1px;`
                 : `font-size: 48px; margin: 0 0 12px 0; color: ${colors.text}; font-weight: 700; letter-spacing: -0.5px;`);
 

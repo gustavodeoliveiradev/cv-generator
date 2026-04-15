@@ -170,22 +170,55 @@ const FormHandler = {
     },
 
     /**
-     * Reseta tudo
+     * Reseta tudo com confirmação modal
      */
     handleReset() {
-        if (!confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-            return;
-        }
+        // Cria modal de confirmação ao invés de confirm() nativo
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.innerHTML = `
+        <div class="confirm-modal-content">
+            <h3>🗑️ Limpar todos os dados?</h3>
+            <p>Esta ação não pode ser desfeita. Seu currículo atual será perdido.</p>
+            <div class="confirm-modal-buttons">
+                <button class="btn btn-secondary" data-action="cancel-reset">Cancelar</button>
+                <button class="btn btn-primary" data-action="confirm-reset" style="background: #ef4444;">Sim, limpar</button>
+            </div>
+        </div>
+    `;
 
-        State.reset();
-        Storage.clear();
+        document.body.appendChild(modal);
 
-        // Limpa formulário visual
-        document.getElementById('cvForm').reset();
-        document.getElementById('experienceList').innerHTML = '';
-        document.getElementById('educationList').innerHTML = '';
+        // Handlers dos botões
+        modal.querySelector('[data-action="cancel-reset"]').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
 
-        Utils.showToast('🗑️ Dados limpos');
+        modal.querySelector('[data-action="confirm-reset"]').addEventListener('click', () => {
+            // Executa reset
+            State.reset();
+            Storage.clear();
+            document.getElementById('cvForm').reset();
+            document.getElementById('experienceList').innerHTML = '';
+            document.getElementById('educationList').innerHTML = '';
+            document.getElementById('skills').value = '';
+
+            // Limpa validações visuais
+            document.querySelectorAll('.input-error, .input-success').forEach(el => {
+                el.classList.remove('input-error', 'input-success');
+            });
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+            document.body.removeChild(modal);
+            Utils.showToast('🗑️ Dados limpos com sucesso');
+        });
+
+        // Fecha ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        });
     },
 
     /**
