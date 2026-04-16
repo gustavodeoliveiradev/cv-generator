@@ -44,7 +44,6 @@
 }
 
 .theme-creative .cv-name {
-    font-family: var(--font-heading);
     font-size: 3rem;
     font-weight: 700;
     color: var(--text);
@@ -60,7 +59,6 @@
 }
 
 .theme-creative .cv-section-title {
-    font-family: var(--font-heading);
     color: var(--primary-dark);
     font-size: 1.3rem;
     text-transform: none;
@@ -86,6 +84,5 @@
 }
 
 .theme-creative .cv-item-title {
-    font-family: var(--font-heading);
     color: var(--text);
 }
