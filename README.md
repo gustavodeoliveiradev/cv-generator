@@ -84,7 +84,7 @@ Projeto construído com **metodologia ágil** — 1 feature por dia, integraçã
 | 3 | 13/04/2026 | Mobile-first + Navegação swipe | ✅ | Media Queries, Touch Events |
 | 4 | 14/04/2026 | Exportação PDF profissional | ✅ | html2canvas, jsPDF, Canvas API |
 | 5 | 15/04/2026 | Validações + UX polish | ✅ | Regex, CSS Animations, A11y |
-| 6 | 16/04/2026 | Import/Export JSON + Drag-drop | ⏳ | File API, Drag & Drop API |
+| 6 | 16/04/2026 | **Import/Export JSON + Drag & Drop** | ✅ | Portabilidade total de dados |
 | 7 | 17/04/2026 | Deploy + Documentação | ⏳ | GitHub Pages, CI/CD |
 
 ---

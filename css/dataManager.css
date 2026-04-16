@@ -1,0 +1,72 @@
+/* ============================================
+   DATA MANAGER STYLES
+   ============================================ */
+
+.data-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--border);
+}
+
+.data-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.data-buttons .btn {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.data-buttons .btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Drag and Drop styles */
+.list-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-item.dragging {
+    opacity: 0.5;
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.list-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.drag-handle {
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.list-item:hover .drag-handle {
+    color: var(--primary);
+}
+
+/* Drop zone indication */
+#experienceList.drag-over,
+#educationList.drag-over {
+    background: rgba(99, 102, 241, 0.05);
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius);
+}
+
+/* Import file input styling (quando visível para debug) */
+#jsonFileInput.visible {
+    display: block !important;
+    margin-top: 10px;
+    padding: 10px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+}
