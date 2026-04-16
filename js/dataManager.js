@@ -1,6 +1,6 @@
 /**
- * Import/Export de dados JSON
- * Portabilidade e backup de dados
+ * Import/Export de dados JSON + Drag & Drop
+ * Dia 6: Portabilidade e backup de dados
  */
 
 const DataManager = {
@@ -63,6 +63,65 @@ const DataManager = {
     },
 
     /**
+     * Sanitiza string para prevenir XSS
+     */
+    sanitizeHTML(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    },
+
+    /**
+     * Valida e sanitiza dados importados
+     */
+    sanitizeImportedData(data) {
+        const sanitized = {
+            personal: {},
+            experience: [],
+            education: [],
+            skills: [],
+            meta: data.meta || {}
+        };
+
+        // Sanitiza campos pessoais
+        Object.keys(data.personal || {}).forEach(key => {
+            sanitized.personal[key] = this.sanitizeHTML(data.personal[key]);
+        });
+
+        // Sanitiza experiências
+        (data.experience || []).forEach(exp => {
+            sanitized.experience.push({
+                id: exp.id || Utils.generateId(),
+                title: this.sanitizeHTML(exp.title),
+                company: this.sanitizeHTML(exp.company),
+                date: this.sanitizeHTML(exp.date),
+                description: this.sanitizeHTML(exp.description)
+            });
+        });
+
+        // Sanitiza educação
+        (data.education || []).forEach(edu => {
+            sanitized.education.push({
+                id: edu.id || Utils.generateId(),
+                degree: this.sanitizeHTML(edu.degree),
+                school: this.sanitizeHTML(edu.school),
+                date: this.sanitizeHTML(edu.date)
+            });
+        });
+
+        // Sanitiza skills
+        (data.skills || []).forEach(skill => {
+            sanitized.skills.push(this.sanitizeHTML(skill));
+        });
+
+        return sanitized;
+    },
+
+    /**
      * Exporta dados para JSON
      */
     exportJSON() {
@@ -115,21 +174,23 @@ const DataManager = {
             // Confirma antes de sobrescrever
             if (State.data.personal.fullName) {
                 const confirm = window.confirm(
-                    '⚠️ Isso substituirá seus dados atuais.\\n\\n' +
-                    `Arquivo: ${file.name}\\n` +
-                    `Nome no arquivo: ${data.personal.fullName || 'N/A'}\\n\\n` +
+                    '⚠️ Isso substituirá seus dados atuais.\n\n' +
+                    `Arquivo: ${file.name}\n` +
+                    `Nome no arquivo: ${data.personal.fullName || 'N/A'}\n\n` +
                     'Deseja continuar?'
                 );
                 if (!confirm) return;
             }
 
-            // Importa dados
+            // 🛡️ SANITIZA dados antes de importar
             const sanitizedData = this.sanitizeImportedData(data);
+
+            // Importa dados sanitizados
             State.load(sanitizedData);
             Storage.save();
 
             // Recarrega formulário
-            this.populateForm(data);
+            this.populateForm(sanitizedData);
 
             Utils.showToast('✅ Dados importados com sucesso!');
 
@@ -160,10 +221,8 @@ const DataManager = {
         // Limpa e recria experiências
         document.getElementById('experienceList').innerHTML = '';
         data.experience.forEach(exp => {
-            // Simula clique no botão adicionar
             document.querySelector('[data-action="add-experience"]').click();
 
-            // Preenche último item adicionado
             const items = document.querySelectorAll('#experienceList .list-item');
             const lastItem = items[items.length - 1];
             if (lastItem) {
