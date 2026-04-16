@@ -19,7 +19,7 @@ const DataManager = {
     setupUI() {
         const editor = document.querySelector('.editor');
         const saveBtn = editor.querySelector('[data-action="save"]');
-        
+
         // Container de ações de dados
         const dataActions = document.createElement('div');
         dataActions.className = 'data-actions';
@@ -45,18 +45,18 @@ const DataManager = {
             </div>
             <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
         `;
-        
+
         saveBtn.parentNode.insertBefore(dataActions, saveBtn.nextSibling);
-        
+
         // Event listeners
         dataActions.querySelector('[data-action="export-json"]').addEventListener('click', () => {
             this.exportJSON();
         });
-        
+
         dataActions.querySelector('[data-action="import-json"]').addEventListener('click', () => {
             document.getElementById('jsonFileInput').click();
         });
-        
+
         document.getElementById('jsonFileInput').addEventListener('change', (e) => {
             this.importJSON(e.target.files[0]);
         });
@@ -74,21 +74,21 @@ const DataManager = {
                 app: 'CV Generator'
             }
         };
-        
+
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        
+
         const name = State.data.personal.fullName || 'curriculo';
         const cleanName = name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
-        
+
         a.href = url;
         a.download = `CV_${cleanName}_backup_${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        
+
         Utils.showToast('✅ Dados exportados para JSON!');
     },
 
@@ -97,21 +97,21 @@ const DataManager = {
      */
     async importJSON(file) {
         if (!file) return;
-        
+
         if (!file.name.endsWith('.json')) {
             Utils.showToast('❌ Selecione um arquivo .json válido');
             return;
         }
-        
+
         try {
             const text = await file.text();
             const data = JSON.parse(text);
-            
+
             // Valida estrutura
             if (!data.personal || !data.experience || !data.education) {
                 throw new Error('Formato JSON inválido');
             }
-            
+
             // Confirma antes de sobrescrever
             if (State.data.personal.fullName) {
                 const confirm = window.confirm(
@@ -122,21 +122,22 @@ const DataManager = {
                 );
                 if (!confirm) return;
             }
-            
+
             // Importa dados
-            State.load(data);
+            const sanitizedData = this.sanitizeImportedData(data);
+            State.load(sanitizedData);
             Storage.save();
-            
+
             // Recarrega formulário
             this.populateForm(data);
-            
+
             Utils.showToast('✅ Dados importados com sucesso!');
-            
+
         } catch (error) {
             console.error('Erro ao importar:', error);
             Utils.showToast('❌ Erro ao importar: ' + error.message);
         }
-        
+
         // Limpa input para permitir reimportar mesmo arquivo
         document.getElementById('jsonFileInput').value = '';
     },
@@ -150,18 +151,18 @@ const DataManager = {
             const element = document.getElementById(key);
             if (element) element.value = value || '';
         });
-        
+
         // Skills
         if (data.skills?.length) {
             document.getElementById('skills').value = data.skills.join(', ');
         }
-        
+
         // Limpa e recria experiências
         document.getElementById('experienceList').innerHTML = '';
         data.experience.forEach(exp => {
             // Simula clique no botão adicionar
             document.querySelector('[data-action="add-experience"]').click();
-            
+
             // Preenche último item adicionado
             const items = document.querySelectorAll('#experienceList .list-item');
             const lastItem = items[items.length - 1];
@@ -172,12 +173,12 @@ const DataManager = {
                 lastItem.querySelector('[data-field="description"]').value = exp.description || '';
             }
         });
-        
+
         // Limpa e recria educação
         document.getElementById('educationList').innerHTML = '';
         data.education.forEach(edu => {
             document.querySelector('[data-action="add-education"]').click();
-            
+
             const items = document.querySelectorAll('#educationList .list-item');
             const lastItem = items[items.length - 1];
             if (lastItem) {
@@ -186,7 +187,7 @@ const DataManager = {
                 lastItem.querySelector('[data-field="date"]').value = edu.date || '';
             }
         });
-        
+
         // Atualiza preview
         Preview.render();
     },
@@ -205,9 +206,9 @@ const DataManager = {
     makeSortable(listId) {
         const list = document.getElementById(listId);
         if (!list) return;
-        
+
         let draggedItem = null;
-        
+
         list.addEventListener('dragstart', (e) => {
             if (e.target.classList.contains('list-item')) {
                 draggedItem = e.target;
@@ -215,17 +216,17 @@ const DataManager = {
                 e.dataTransfer.effectAllowed = 'move';
             }
         });
-        
+
         list.addEventListener('dragend', (e) => {
             if (e.target.classList.contains('list-item')) {
                 e.target.style.opacity = '1';
                 draggedItem = null;
-                
+
                 // Atualiza estado com nova ordem
                 this.updateOrderFromDOM(listId);
             }
         });
-        
+
         list.addEventListener('dragover', (e) => {
             e.preventDefault();
             const afterElement = this.getDragAfterElement(list, e.clientY);
@@ -235,10 +236,10 @@ const DataManager = {
                 list.appendChild(draggedItem);
             }
         });
-        
+
         // Adiciona atributo draggable aos itens existentes
         this.enableDragging(list);
-        
+
         // Observer para novos itens
         const observer = new MutationObserver(() => {
             this.enableDragging(list);
@@ -253,7 +254,7 @@ const DataManager = {
         list.querySelectorAll('.list-item').forEach(item => {
             item.setAttribute('draggable', 'true');
             item.style.cursor = 'move';
-            
+
             // Adiciona handle visual
             if (!item.querySelector('.drag-handle')) {
                 const handle = document.createElement('div');
@@ -281,11 +282,11 @@ const DataManager = {
      */
     getDragAfterElement(container, y) {
         const draggableElements = [...container.querySelectorAll('.list-item:not([style*="opacity: 0.5"])')];
-        
+
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
-            
+
             if (offset < 0 && offset > closest.offset) {
                 return { offset: offset, element: child };
             } else {
@@ -301,12 +302,12 @@ const DataManager = {
         const list = document.getElementById(listId);
         const items = list.querySelectorAll('.list-item');
         const newOrder = [];
-        
+
         items.forEach(item => {
             const id = item.dataset.id || item.id.replace(/^(exp|edu)-/, '');
             newOrder.push(id);
         });
-        
+
         // Atualiza State
         if (listId === 'experienceList') {
             const newExperience = [];
@@ -323,10 +324,10 @@ const DataManager = {
             });
             State.data.education = newEducation;
         }
-        
+
         Storage.save();
         Preview.render();
-        
+
         Utils.showToast('🔄 Ordem atualizada!', 1500);
     }
 };
