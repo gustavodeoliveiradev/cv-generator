@@ -1,5 +1,5 @@
 /**
- * Exportação PDF Profissional - VERSÃO FONTES CORRIGIDAS
+ * Exportação PDF Profissional - VERSÃO FONTE UNIFORME
  */
 
 const PDFExport = {
@@ -7,7 +7,7 @@ const PDFExport = {
     A4_HEIGHT: 297,
 
     init() {
-        console.log('📄 PDF Export v2.3 (fontes corrigidas)');
+        console.log('📄 PDF Export v2.4 (fonte uniforme)');
     },
 
     async export() {
@@ -55,7 +55,7 @@ const PDFExport = {
         const data = State.data;
         const theme = Themes.currentTheme;
 
-        // 🎨 CORES de cada tema
+        // Cores de cada tema
         const themeColors = {
             minimal: { 
                 primary: '#2563eb',
@@ -79,7 +79,7 @@ const PDFExport = {
 
         const colors = themeColors[theme] || themeColors.minimal;
 
-        // 🚨 CORREÇÃO: Fontes corretas por tema
+        // 🚨 CORREÇÃO: Usa a fonte selecionada para TUDO (uniforme)
         const fontMap = {
             'inter': 'Inter, Arial, sans-serif',
             'roboto': 'Roboto, Arial, sans-serif',
@@ -89,14 +89,9 @@ const PDFExport = {
         };
 
         const selectedFont = Themes.currentFont || 'inter';
-        const baseFont = fontMap[selectedFont] || fontMap['inter'];
+        const uniformFont = fontMap[selectedFont] || fontMap['inter'];
 
-        // Fonte para títulos (serif no creative, sans nos outros)
-        const headingFont = theme === 'creative' 
-            ? '"Playfair Display", Georgia, serif'  // Sempre serif no creative
-            : baseFont;
-
-        console.log('PDF Fontes:', { tema: theme, base: selectedFont, heading: headingFont });
+        console.log('PDF Fonte (uniforme):', selectedFont, '->', uniformFont);
 
         const container = document.createElement('div');
         container.id = 'pdf-temp-container';
@@ -107,23 +102,23 @@ const PDFExport = {
             width: 800px;
             background: ${colors.bg};
             padding: 50px 60px;
-            font-family: ${baseFont};
+            font-family: ${uniformFont};
             color: ${colors.text};
             line-height: 1.6;
             box-sizing: border-box;
         `;
 
-        container.innerHTML = this.buildCleanHTML(data, colors, theme, headingFont, baseFont);
+        container.innerHTML = this.buildCleanHTML(data, colors, theme, uniformFont);
         return container;
     },
 
-    buildCleanHTML(data, colors, theme, headingFont, baseFont) {
+    buildCleanHTML(data, colors, theme, uniformFont) {
         const p = data.personal;
 
         const isCreative = theme === 'creative';
         const isModern = theme === 'modern';
 
-        // Header com variações por tema
+        // Header com variações por tema (mas mesma fonte!)
         const headerBorder = isCreative 
             ? `border-bottom: 3px solid ${colors.primary}; position: relative;`
             : `border-bottom: 3px solid ${colors.primary};`;
@@ -132,23 +127,23 @@ const PDFExport = {
             ? `<div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: ${colors.accent}; border-radius: 2px;"></div>` 
             : '';
 
-        // 🚨 CORREÇÃO: Título com fonte correta
+        // 🚨 TODOS OS ELEMENTOS COM A MESMA FONTE
         const titleStyle = isCreative
-            ? `font-size: 52px; margin: 0 0 15px 0; color: ${colors.text}; font-weight: 700; font-family: ${headingFont};`
+            ? `font-size: 52px; margin: 0 0 15px 0; color: ${colors.text}; font-weight: 700; font-family: ${uniformFont};`
             : (isModern 
-                ? `font-size: 48px; margin: 0 0 12px 0; color: ${colors.primary}; font-weight: 800; letter-spacing: -1px; font-family: ${headingFont};`
-                : `font-size: 48px; margin: 0 0 12px 0; color: ${colors.text}; font-weight: 700; letter-spacing: -0.5px; font-family: ${headingFont};`);
+                ? `font-size: 48px; margin: 0 0 12px 0; color: ${colors.primary}; font-weight: 800; letter-spacing: -1px; font-family: ${uniformFont};`
+                : `font-size: 48px; margin: 0 0 12px 0; color: ${colors.text}; font-weight: 700; letter-spacing: -0.5px; font-family: ${uniformFont};`);
 
         const subtitleStyle = isCreative
-            ? `font-size: 20px; margin: 0 0 20px 0; color: ${colors.primary}; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; font-family: ${baseFont};`
-            : `font-size: 22px; margin: 0 0 18px 0; color: ${colors.primary}; font-weight: 600; font-family: ${baseFont};`;
+            ? `font-size: 20px; margin: 0 0 20px 0; color: ${colors.primary}; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; font-family: ${uniformFont};`
+            : `font-size: 22px; margin: 0 0 18px 0; color: ${colors.primary}; font-weight: 600; font-family: ${uniformFont};`;
 
         let html = `
             <div style="text-align: center; margin-bottom: 35px; padding-bottom: 25px; ${headerBorder}">
                 ${headerAfter}
                 <h1 style="${titleStyle}">${p.fullName || 'Seu Nome'}</h1>
                 <p style="${subtitleStyle}">${p.jobTitle || ''}</p>
-                <div style="font-size: 15px; color: #666; line-height: 1.8; font-family: ${baseFont};">
+                <div style="font-size: 15px; color: #666; line-height: 1.8; font-family: ${uniformFont};">
                     ${p.email ? `<span style="margin: 0 12px;">📧 ${p.email}</span>` : ''}
                     ${p.phone ? `<span style="margin: 0 12px;">📱 ${p.phone}</span>` : ''}
                     ${p.location ? `<span style="margin: 0 12px;">📍 ${p.location}</span>` : ''}
@@ -156,16 +151,16 @@ const PDFExport = {
             </div>
         `;
 
-        // Seções com estilo por tema
+        // Seções com mesma fonte em tudo
         const sectionTitleStyle = isCreative
-            ? `font-size: 18px; color: ${colors.primary}; margin: 0 0 20px 0; padding-bottom: 12px; border-bottom: 2px dashed ${colors.accent}33; font-weight: 700; font-family: ${headingFont};`
-            : `font-size: 16px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 18px 0; padding-bottom: 10px; border-bottom: 2px solid #eee; font-weight: 700; font-family: ${headingFont};`;
+            ? `font-size: 18px; color: ${colors.primary}; margin: 0 0 20px 0; padding-bottom: 12px; border-bottom: 2px dashed ${colors.accent}33; font-weight: 700; font-family: ${uniformFont};`
+            : `font-size: 16px; color: ${colors.primary}; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 18px 0; padding-bottom: 10px; border-bottom: 2px solid #eee; font-weight: 700; font-family: ${uniformFont};`;
 
         if (p.summary) {
             html += `
                 <div style="margin-bottom: 30px;">
                     <h2 style="${sectionTitleStyle}">Resumo Profissional</h2>
-                    <p style="margin: 0; color: #555; line-height: 1.8; font-size: 15px; font-family: ${baseFont};">${p.summary}</p>
+                    <p style="margin: 0; color: #555; line-height: 1.8; font-size: 15px; font-family: ${uniformFont};">${p.summary}</p>
                 </div>
             `;
         }
@@ -178,17 +173,17 @@ const PDFExport = {
 
             data.experience.forEach(exp => {
                 const companyStyle = isCreative
-                    ? `font-size: 15px; color: ${colors.primary}; margin: 0 0 10px 0; font-weight: 700; font-family: ${baseFont};`
-                    : `font-size: 15px; color: ${colors.primary}; margin: 0 0 10px 0; font-weight: 600; font-family: ${baseFont};`;
+                    ? `font-size: 15px; color: ${colors.primary}; margin: 0 0 10px 0; font-weight: 700; font-family: ${uniformFont};`
+                    : `font-size: 15px; color: ${colors.primary}; margin: 0 0 10px 0; font-weight: 600; font-family: ${uniformFont};`;
 
                 html += `
                     <div style="margin-bottom: 25px;">
                         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
-                            <h3 style="font-size: 18px; margin: 0; color: ${colors.text}; font-weight: 600; font-family: ${headingFont};">${exp.title || 'Cargo'}</h3>
-                            <span style="font-size: 14px; color: #888; font-weight: 500; font-family: ${baseFont};">${exp.date || ''}</span>
+                            <h3 style="font-size: 18px; margin: 0; color: ${colors.text}; font-weight: 600; font-family: ${uniformFont};">${exp.title || 'Cargo'}</h3>
+                            <span style="font-size: 14px; color: #888; font-weight: 500; font-family: ${uniformFont};">${exp.date || ''}</span>
                         </div>
                         <p style="${companyStyle}">${exp.company || ''}</p>
-                        <p style="font-size: 14px; color: #666; margin: 0; line-height: 1.7; font-family: ${baseFont};">${exp.description || ''}</p>
+                        <p style="font-size: 14px; color: #666; margin: 0; line-height: 1.7; font-family: ${uniformFont};">${exp.description || ''}</p>
                     </div>
                 `;
             });
@@ -206,10 +201,10 @@ const PDFExport = {
                 html += `
                     <div style="margin-bottom: 18px;">
                         <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                            <h3 style="font-size: 17px; margin: 0; color: ${colors.text}; font-weight: 600; font-family: ${headingFont};">${edu.degree || 'Curso'}</h3>
-                            <span style="font-size: 14px; color: #888; font-weight: 500; font-family: ${baseFont};">${edu.date || ''}</span>
+                            <h3 style="font-size: 17px; margin: 0; color: ${colors.text}; font-weight: 600; font-family: ${uniformFont};">${edu.degree || 'Curso'}</h3>
+                            <span style="font-size: 14px; color: #888; font-weight: 500; font-family: ${uniformFont};">${edu.date || ''}</span>
                         </div>
-                        <p style="font-size: 15px; color: ${colors.primary}; margin: 6px 0 0 0; font-weight: 600; font-family: ${baseFont};">${edu.school || ''}</p>
+                        <p style="font-size: 15px; color: ${colors.primary}; margin: 6px 0 0 0; font-weight: 600; font-family: ${uniformFont};">${edu.school || ''}</p>
                     </div>
                 `;
             });
@@ -219,10 +214,10 @@ const PDFExport = {
 
         if (data.skills.length > 0) {
             const skillStyle = isCreative
-                ? `background: ${colors.primary}; color: white; padding: 8px 16px; border-radius: 20px 0 20px 0; font-size: 13px; font-weight: 600; font-family: ${baseFont};`
+                ? `background: ${colors.primary}; color: white; padding: 8px 16px; border-radius: 20px 0 20px 0; font-size: 13px; font-weight: 600; font-family: ${uniformFont};`
                 : (isModern
-                    ? `background: transparent; border: 2px solid ${colors.primary}; color: ${colors.primary}; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; font-family: ${baseFont};`
-                    : `background: ${colors.primary}; color: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; font-family: ${baseFont};`);
+                    ? `background: transparent; border: 2px solid ${colors.primary}; color: ${colors.primary}; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; font-family: ${uniformFont};`
+                    : `background: ${colors.primary}; color: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; font-family: ${uniformFont};`);
 
             html += `
                 <div style="margin-bottom: 30px;">
