@@ -85,7 +85,7 @@ Projeto construído com **metodologia ágil** — 1 feature por dia, integraçã
 | 4 | 14/04/2026 | Exportação PDF profissional | ✅ | html2canvas, jsPDF, Canvas API |
 | 5 | 15/04/2026 | Validações + UX polish | ✅ | Regex, CSS Animations, A11y |
 | 6 | 16/04/2026 | **Import/Export JSON + Drag & Drop** | ✅ | Portabilidade total de dados |
-| 7 | 17/04/2026 | Deploy + Documentação | ✅  | GitHub Pages, CI/CD |
+| 7 | 17/04/2026 | Deploy + Documentação | ✅ | GitHub Pages, SEO |
 
 ---
 
@@ -204,7 +204,7 @@ Este projeto demonstra competências em:
 - **CSS Avançado** — Grid, Flexbox, animações, variáveis
 - **JavaScript Moderno** — ES6+, async/await, APIs nativas
 - **UX/UI Design** — Mobile-first, feedback visual, acessibilidade
-- **DevOps** — CI/CD com GitHub Actions, deploy automatizado
+- **DevOps** — Deploy automatizado via GitHub Pages
 
 ---
 
@@ -234,7 +234,21 @@ Copyright (c) 2026 Gustavo de Oliveira
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
 ---
@@ -268,7 +282,5 @@ in the Software without restriction...
 **Status:** 🚀 **PRODUÇÃO** — [Ver Demo Ao Vivo](https://gustavodeoliveiradev.github.io/cv-generator/)
 
 <p align="center">
-  <a href="https://github.com/gustavodeoliveiradev/cv-generator/actions/workflows/deploy.yml">
-    <img src="https://github.com/gustavodeoliveiradev/cv-generator/actions/workflows/deploy.yml/badge.svg" alt="CI/CD Status">
-  </a>
+  <img src="https://img.shields.io/badge/deploy-GitHub%20Pages-blue?logo=github" alt="Deploy Status">
 </p>
