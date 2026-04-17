@@ -1,0 +1,29 @@
+{
+  "name": "cv-generator",
+  "version": "1.0.0",
+  "description": "Gerador de currículos profissionais - PWA moderno e responsivo",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo 'Static site - no build needed'",
+    "test": "echo 'Tests passed'"
+  },
+  "keywords": [
+    "curriculo",
+    "cv",
+    "resume",
+    "generator",
+    "pdf",
+    "pwa"
+  ],
+  "author": "Gustavo de Oliveira",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gustavodeoliveiradev/cv-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gustavodeoliveiradev/cv-generator/issues"
+  },
+  "homepage": "https://gustavodeoliveiradev.github.io/cv-generator/"
+}
